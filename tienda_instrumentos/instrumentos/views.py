@@ -16,7 +16,7 @@ def inicio(request):
 def agregar_monitor(request):
     if request.method == "POST":
         form_especificaciones = EspecificacionesTecnicasForm(request.POST)
-        form_monitor = MonitorForm(request.POST, request.FILES)  # Agregar request.FILES
+        form_monitor = MonitorForm(request.POST, request.FILES)
 
         if form_especificaciones.is_valid() and form_monitor.is_valid():
             especificaciones = form_especificaciones.save()

@@ -1,7 +1,6 @@
 from django import forms
 from .models import Monitor, EspecificacionesTecnicas, Marca, Categoria
 
-# Mapeo de modelos por marca
 MODELOS_POR_MARCA = {
     'Yamaha': [
         ('HS5', 'HS5'),
@@ -50,7 +49,6 @@ MODELOS_POR_MARCA = {
     ],
 }
 
-# Nombres por marca
 NOMBRES_POR_MARCA = {
     'Yamaha': [
         ('HS Series', 'HS Series'),
@@ -99,7 +97,6 @@ class MonitorForm(forms.ModelForm):
         })
     )
 
-    # Cambiamos a CharField para evitar validación estricta de choices
     nombre = forms.CharField(
         max_length=100,
         widget=forms.Select(attrs={
@@ -109,7 +106,6 @@ class MonitorForm(forms.ModelForm):
         label="Nombre/Serie"
     )
 
-    # Cambiamos a CharField para evitar validación estricta de choices
     modelo = forms.CharField(
         max_length=100,
         widget=forms.Select(attrs={'id': 'id_modelo'}),
@@ -136,7 +132,6 @@ class MonitorForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Inicializar el widget Select con las opciones por defecto
         self.fields['nombre'].widget.choices = [('', 'Primero seleccione una marca')]
         self.fields['modelo'].widget.choices = [('', 'Primero seleccione una marca')]
 
@@ -154,7 +149,6 @@ class MonitorForm(forms.ModelForm):
         if not nombre:
             raise forms.ValidationError("Debe seleccionar un nombre/serie.")
 
-        # Validar que el nombre pertenezca a la marca seleccionada
         if marca and marca.nombre in NOMBRES_POR_MARCA:
             nombres_validos = [n[0] for n in NOMBRES_POR_MARCA[marca.nombre]]
             if nombre not in nombres_validos:
@@ -169,7 +163,6 @@ class MonitorForm(forms.ModelForm):
         if not modelo:
             raise forms.ValidationError("Debe seleccionar un modelo.")
 
-        # Validar que el modelo pertenezca a la marca seleccionada
         if marca and marca.nombre in MODELOS_POR_MARCA:
             modelos_validos = [m[0] for m in MODELOS_POR_MARCA[marca.nombre]]
             if modelo not in modelos_validos:
