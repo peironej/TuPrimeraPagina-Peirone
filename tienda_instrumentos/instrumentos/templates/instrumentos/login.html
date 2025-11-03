@@ -1,0 +1,12 @@
+{% extends "instrumentos/base.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width: 400px;">
+  <h2>Iniciar Sesión</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+  </form>
+  <a href="{% url 'inicio' %}" class="btn btn-link mt-3">Volver al inicio</a>
+</div>
+{% endblock %}

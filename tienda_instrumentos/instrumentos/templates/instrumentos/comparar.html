@@ -1,0 +1,64 @@
+{% extends "instrumentos/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Comparar Monitores</h2>
+  <form method="get" class="mb-4">
+    <div class="row">
+      <div class="col-md-5">
+        <label for="monitor1">Monitor 1:</label>
+        <select name="monitor1" class="form-control">
+          {% for m in monitores %}
+          <option value="{{ m.id }}">{{ m.marca }} {{ m.modelo }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-5">
+        <label for="monitor2">Monitor 2:</label>
+        <select name="monitor2" class="form-control">
+          {% for m in monitores %}
+          <option value="{{ m.id }}">{{ m.marca }} {{ m.modelo }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Comparar</button>
+      </div>
+    </div>
+  </form>
+
+  {% if monitor1 and monitor2 %}
+  <h4>Resultados de la comparación:</h4>
+  <table class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>Especificación</th>
+        <th>{{ monitor1.marca }} {{ monitor1.modelo }}</th>
+        <th>{{ monitor2.marca }} {{ monitor2.modelo }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Potencia</td>
+        <td>{{ monitor1.especificaciones.potencia }} W</td>
+        <td>{{ monitor2.especificaciones.potencia }} W</td>
+      </tr>
+      <tr>
+        <td>Rango de Frecuencia</td>
+        <td>{{ monitor1.especificaciones.frecuencia_min }} Hz – {{ monitor1.especificaciones.frecuencia_max }} Hz</td>
+        <td>{{ monitor2.especificaciones.frecuencia_min }} Hz – {{ monitor2.especificaciones.frecuencia_max }} Hz</td>
+      </tr>
+      <tr>
+        <td>Material Tweeter</td>
+        <td>{{ monitor1.especificaciones.material_tweeter }}</td>
+        <td>{{ monitor2.especificaciones.material_tweeter }}</td>
+      </tr>
+      <tr>
+        <td>Peso</td>
+        <td>{{ monitor1.especificaciones.peso }} kg</td>
+        <td>{{ monitor2.especificaciones.peso }} kg</td>
+      </tr>
+    </tbody>
+  </table>
+  {% endif %}
+</div>
+{% endblock %}

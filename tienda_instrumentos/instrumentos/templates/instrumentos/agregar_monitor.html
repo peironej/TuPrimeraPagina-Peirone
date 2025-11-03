@@ -1,0 +1,120 @@
+{% extends "instrumentos/base.html" %}
+{% block title %}Agregar Monitor{% endblock %}
+
+{% block content %}
+<h2>Registrar Monitor y Especificaciones</h2>
+
+{% if monitor_form.errors or especificaciones_form.errors %}
+<div style="color: red; margin-bottom: 20px;">
+  <p><strong>Por favor corrige los siguientes errores:</strong></p>
+  {{ monitor_form.errors }}
+  {{ especificaciones_form.errors }}
+</div>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <fieldset>
+    <legend>Datos del Monitor</legend>
+    {{ monitor_form.as_p }}
+  </fieldset>
+
+  <fieldset>
+    <legend>Especificaciones Técnicas</legend>
+    {{ especificaciones_form.as_p }}
+  </fieldset>
+
+  <button type="submit">Guardar</button>
+</form>
+
+<script>
+  // Debug: Verificar que los datos lleguen correctamente
+  console.log('Nombres por marca:', {{ nombres_json| safe }});
+  console.log('Modelos por marca:', {{ modelos_json| safe }});
+
+  const nombresPorMarcaId = {{ nombres_json| safe }};
+  const modelosPorMarcaId = {{ modelos_json| safe }};
+
+  function actualizarNombresYModelos() {
+    console.log('actualizarNombresYModelos llamada');
+
+    const marcaSelect = document.getElementById('id_marca');
+    const nombreSelect = document.getElementById('id_nombre');
+    const modeloSelect = document.getElementById('id_modelo');
+    const marcaId = marcaSelect.value;
+
+    console.log('Marca seleccionada ID:', marcaId);
+
+    // Limpiar nombres
+    nombreSelect.innerHTML = '<option value="">Seleccione un nombre</option>';
+    modeloSelect.innerHTML = '<option value="">Primero seleccione un nombre</option>';
+
+    // Agregar nombres si existen para esta marca
+    if (marcaId && nombresPorMarcaId[marcaId]) {
+      console.log('Nombres encontrados:', nombresPorMarcaId[marcaId]);
+      nombresPorMarcaId[marcaId].forEach(([value, label]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = label;
+        nombreSelect.appendChild(option);
+      });
+    }
+
+    // IMPORTANTE: También actualizar modelos cuando cambia la marca
+    actualizarModelos();
+  }
+
+  function actualizarModelos() {
+    console.log('actualizarModelos llamada');
+
+    const marcaSelect = document.getElementById('id_marca');
+    const modeloSelect = document.getElementById('id_modelo');
+    const marcaId = marcaSelect.value;
+
+    console.log('Marca ID para modelos:', marcaId);
+    console.log('Modelos disponibles:', modelosPorMarcaId[marcaId]);
+
+    // Limpiar modelos
+    modeloSelect.innerHTML = '<option value="">Seleccione un modelo</option>';
+
+    // Agregar modelos si existen para esta marca
+    if (marcaId && modelosPorMarcaId[marcaId]) {
+      console.log('Agregando', modelosPorMarcaId[marcaId].length, 'modelos');
+      modelosPorMarcaId[marcaId].forEach(([value, label]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = label;
+        modeloSelect.appendChild(option);
+        console.log('Modelo agregado:', label);
+      });
+    } else {
+      console.log('No hay modelos para esta marca');
+    }
+  }
+
+  // Inicializar al cargar la página
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM cargado, inicializando eventos');
+
+    const marcaSelect = document.getElementById('id_marca');
+    const nombreSelect = document.getElementById('id_nombre');
+
+    if (marcaSelect) {
+      console.log('Marca select encontrado');
+      marcaSelect.addEventListener('change', actualizarNombresYModelos);
+
+      // Si ya hay una marca seleccionada al cargar, actualizar
+      if (marcaSelect.value) {
+        console.log('Marca ya seleccionada al cargar:', marcaSelect.value);
+        actualizarNombresYModelos();
+      }
+    }
+
+    if (nombreSelect) {
+      console.log('Nombre select encontrado');
+      nombreSelect.addEventListener('change', actualizarModelos);
+    }
+  });
+</script>
+{% endblock %}

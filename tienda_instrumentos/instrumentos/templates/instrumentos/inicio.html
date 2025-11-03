@@ -1,0 +1,75 @@
+{% extends "instrumentos/base.html" %}
+{% block title %}Inicio - Monitores Disponibles{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+  <h2 style="margin: 0;">Monitores Disponibles</h2>
+  <a href="{% url 'comparar_monitores' %}" style="color: #f90;">Comparar Monitores</a>
+</div>
+
+{% if monitores %}
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;">
+  {% for monitor in monitores %}
+  <article
+    style="border: 1px solid #444; padding: 20px; border-radius: 8px; background: #2a2a2a; display: flex; flex-direction: column;">
+    <div style="flex-grow: 1;">
+      {% if monitor.imagen %}
+        <img src="{{ monitor.imagen.url }}" alt="{{ monitor.marca.nombre }} {{ monitor.modelo }}"
+          style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+      {% else %}
+        <div
+          style="width: 100%; height: 250px; background: #1a1a1a; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #666;">
+          <span style="font-size: 3em;">🎧</span>
+        </div>
+      {% endif %}
+
+      <h3 style="margin-top: 0; color: #fff;">{{ monitor.marca.nombre }} {{ monitor.modelo }}</h3>
+
+      {% if monitor.nombre %}
+      <p style="color: #aaa; margin: 5px 0; font-size: 0.9em;">{{ monitor.nombre }}</p>
+      {% endif %}
+
+      <p style="color: #aaa; margin: 10px 0; font-size: 0.9em;">
+        <span style="display: inline-block; background: #1a1a1a; padding: 3px 10px; border-radius: 3px;">
+          {{ monitor.categoria.nombre }}
+        </span>
+      </p>
+
+      <p style="font-size: 1.8em; color: #f90; margin: 15px 0; font-weight: bold;">
+        ${{ monitor.precio_usd }}
+      </p>
+
+      {% if monitor.especificaciones %}
+      <div style="background: #1a1a1a; padding: 12px; border-radius: 5px; margin: 15px 0; font-size: 0.9em;">
+        <p style="margin: 5px 0;"><strong>⚡ Potencia:</strong> {{ monitor.especificaciones.potencia_w }}W</p>
+        <p style="margin: 5px 0;"><strong>🔊 Frecuencia:</strong> {{ monitor.especificaciones.rango_frecuencia_min }}-{{ monitor.especificaciones.rango_frecuencia_max }}Hz</p>
+        <p style="margin: 5px 0;"><strong>🎵 Tweeter:</strong> {{ monitor.especificaciones.material_tweeter }}</p>
+        <p style="margin: 5px 0;"><strong>🔌 Entradas:</strong> {{ monitor.especificaciones.cantidad_entradas }} |
+          <strong>⚖️ Peso:</strong> {{ monitor.especificaciones.peso_kg }}kg</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <div style="margin-top: auto; padding-top: 15px;">
+      {% if user.is_authenticated %}
+      <a href="{% url 'detalle_monitor' monitor.id %}"
+        style="display: block; text-align: center; padding: 12px; background: #f90; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        Ver detalles
+      </a>
+      {% endif %}
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div style="text-align: center; padding: 60px 20px; background: #2a2a2a; border-radius: 8px;">
+  <p style="font-size: 1.2em; color: #aaa;">No hay monitores disponibles en este momento.</p>
+  {% if user.is_superuser %}
+  <a href="{% url 'agregar_monitor' %}"
+    style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: #f90; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold;">
+    Agregar primer monitor
+  </a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

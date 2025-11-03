@@ -1,0 +1,84 @@
+{% extends "instrumentos/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-3">Comparar Monitores</h2>
+
+  <form method="get" class="mb-4">
+    <div class="row">
+      <div class="col-md-5">
+        <label for="m1">Monitor 1:</label>
+        <select name="m1" id="m1" class="form-select">
+          <option value="">-- Seleccionar --</option>
+          {% for monitor in monitores %}
+          <option value="{{ monitor.id }}" {% if monitor1 and monitor.id==monitor1.id %}selected{% endif %}>
+            {{ monitor.marca }} {{ monitor.modelo }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-5">
+        <label for="m2">Monitor 2:</label>
+        <select name="m2" id="m2" class="form-select">
+          <option value="">-- Seleccionar --</option>
+          {% for monitor in monitores %}
+          <option value="{{ monitor.id }}" {% if monitor2 and monitor.id==monitor2.id %}selected{% endif %}>
+            {{ monitor.marca }} {{ monitor.modelo }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Comparar</button>
+      </div>
+    </div>
+  </form>
+
+  {% if monitor1 and monitor2 %}
+  <table class="table table-striped text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Característica</th>
+        <th>{{ monitor1.marca }} {{ monitor1.modelo }}</th>
+        <th>{{ monitor2.marca }} {{ monitor2.modelo }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Precio (USD)</td>
+        <td>{{ monitor1.precio }}</td>
+        <td>{{ monitor2.precio }}</td>
+      </tr>
+      <tr>
+        <td>Potencia (W)</td>
+        <td>{{ monitor1.especificaciones.potencia }}</td>
+        <td>{{ monitor2.especificaciones.potencia }}</td>
+      </tr>
+      <tr>
+        <td>Rango de Frecuencia (Hz)</td>
+        <td>{{ monitor1.especificaciones.frecuencia_min }} - {{ monitor1.especificaciones.frecuencia_max }}</td>
+        <td>{{ monitor2.especificaciones.frecuencia_min }} - {{ monitor2.especificaciones.frecuencia_max }}</td>
+      </tr>
+      <tr>
+        <td>Material del Tweeter</td>
+        <td>{{ monitor1.especificaciones.material_tweeter }}</td>
+        <td>{{ monitor2.especificaciones.material_tweeter }}</td>
+      </tr>
+      <tr>
+        <td>Cantidad de Entradas</td>
+        <td>{{ monitor1.especificaciones.cantidad_entradas }}</td>
+        <td>{{ monitor2.especificaciones.cantidad_entradas }}</td>
+      </tr>
+      <tr>
+        <td>Peso (kg)</td>
+        <td>{{ monitor1.especificaciones.peso }}</td>
+        <td>{{ monitor2.especificaciones.peso }}</td>
+      </tr>
+    </tbody>
+  </table>
+  {% elif monitor1 or monitor2 %}
+  <p class="text-muted mt-4">Seleccioná dos monitores para comparar.</p>
+  {% endif %}
+</div>
+{% endblock %}

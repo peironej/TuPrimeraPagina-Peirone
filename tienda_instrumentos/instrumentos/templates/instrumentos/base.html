@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Tienda de Monitores{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+</head>
+
+<body>
+  <header>
+    <h1>🎧 Tienda de Monitores de Estudio</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+
+            {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
+
+            {% if user.is_superuser %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'agregar_monitor' %}">Agregar Monitor</a></li>
+            {% endif %}
+
+            <li class="nav-item"><a class="nav-link" href="{% url 'buscar_monitor' %}">Buscar</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'comparar_monitores' %}">Comparar</a></li>
+            <li class="nav-item">
+              <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+                {% csrf_token %}
+              </form>
+              <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Cerrar
+                sesión</a>
+            </li>
+
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'registro' %}">Registrarse</a></li>
+            {% endif %}
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>Desarrollado por Javier Peirone — Curso de Python</p>
+  </footer>
+</body>
+
+</html>

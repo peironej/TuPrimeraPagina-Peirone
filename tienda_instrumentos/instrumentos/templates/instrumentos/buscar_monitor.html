@@ -1,0 +1,32 @@
+{% extends "instrumentos/base.html" %}
+{% block title %}Buscar Monitores{% endblock %}
+
+{% block content %}
+<h2>Buscar Monitores</h2>
+
+<form method="GET" action="{% url 'buscar_monitor' %}">
+  <input type="text" name="q" placeholder="Buscar por marca o modelo" value="{{ query }}" required>
+  <button type="submit">Buscar</button>
+</form>
+
+{% if query %}
+<h3>Resultados para "{{ query }}":</h3>
+
+{% if resultados %}
+<ul>
+  {% for monitor in resultados %}
+  <li>
+    <strong>{{ monitor.marca.nombre }} {{ monitor.modelo }}</strong>
+    — USD ${{ monitor.precio_usd }}
+    {% if monitor.nombre %}
+    <br>
+    <small>Serie: {{ monitor.nombre }}</small>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No se encontraron monitores con ese criterio de búsqueda.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "instrumentos/base.html" %}
+{% block title %}{{ monitor.marca.nombre }} {{ monitor.modelo }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 40px auto;">
+  <a href="{% url 'inicio' %}" style="color: #f90; margin-bottom: 20px; display: inline-block;">← Volver a inicio</a>
+
+  <article style="border: 1px solid #444; padding: 40px; border-radius: 10px; background: #2a2a2a;">
+    {% if monitor.imagen %}
+    <img src="{{ monitor.imagen.url }}" alt="{{ monitor.marca.nombre }} {{ monitor.modelo }}"
+      style="width: 100%; max-width: 600px; height: auto; border-radius: 10px; margin: 0 auto 30px; display: block;">
+    {% else %}
+    <div
+      style="width: 100%; max-width: 600px; height: 400px; background: #1a1a1a; border-radius: 10px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center;">
+      <span style="font-size: 6em; color: #666;">🎧</span>
+    </div>
+    {% endif %}
+    <h2 style="color: #fff; font-size: 2.5em; margin-bottom: 10px;">{{ monitor.marca.nombre }} {{ monitor.modelo }}</h2>
+
+    {% if monitor.nombre %}
+    <p style="color: #aaa; font-size: 1.2em; margin-bottom: 20px;">{{ monitor.nombre }}</p>
+    {% endif %}
+
+    <p style="color: #aaa; margin-bottom: 30px;">
+      <span style="display: inline-block; background: #1a1a1a; padding: 8px 15px; border-radius: 5px;">
+        {{ monitor.categoria.nombre }}
+      </span>
+    </p>
+
+    <p style="font-size: 3em; color: #f90; margin: 30px 0; font-weight: bold;">
+      USD ${{ monitor.precio_usd }}
+    </p>
+
+    {% if monitor.especificaciones %}
+    <div style="background: #1a1a1a; padding: 30px; border-radius: 8px; margin: 30px 0;">
+      <h3 style="color: #f90; margin-bottom: 20px; font-size: 1.5em;">Especificaciones Técnicas</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        <div>
+          <p style="color: #aaa; margin-bottom: 5px;">Potencia</p>
+          <p style="font-size: 1.3em; font-weight: bold;">{{ monitor.especificaciones.potencia_w }}W</p>
+        </div>
+        <div>
+          <p style="color: #aaa; margin-bottom: 5px;">Rango de Frecuencia</p>
+          <p style="font-size: 1.3em; font-weight: bold;">{{ monitor.especificaciones.rango_frecuencia_min }}-{{ monitor.especificaciones.rango_frecuencia_max }}Hz</p>
+        </div>
+        <div>
+          <p style="color: #aaa; margin-bottom: 5px;">Material Cono</p>
+          <p style="font-size: 1.3em; font-weight: bold;">{{ monitor.especificaciones.material_cono }}</p>
+        </div>
+        <div>
+          <p style="color: #aaa; margin-bottom: 5px;">Material Tweeter</p>
+          <p style="font-size: 1.3em; font-weight: bold;">{{ monitor.especificaciones.material_tweeter }}</p>
+        </div>
+        <div>
+          <p style="color: #aaa; margin-bottom: 5px;">Cantidad de Entradas</p>
+          <p style="font-size: 1.3em; font-weight: bold;">{{ monitor.especificaciones.cantidad_entradas }}</p>
+        </div>
+        <div>
+          <p style="color: #aaa; margin-bottom: 5px;">Peso</p>
+          <p style="font-size: 1.3em; font-weight: bold;">{{ monitor.especificaciones.peso_kg }} kg</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 40px; text-align: center;">
+      <a href="{% url 'comprar_monitor' monitor.id %}"
+        style="display: block; text-align: center; padding: 12px; background: #f90; color: #000; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        Comprar
+      </a>
+    </div>
+  </article>
+</div>
+{% endblock %}

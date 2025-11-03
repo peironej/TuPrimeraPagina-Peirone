@@ -1,0 +1,12 @@
+{% extends "instrumentos/base.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width: 400px;">
+  <h2>Registro de Usuario</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success w-100">Registrarse</button>
+  </form>
+  <a href="{% url 'login' %}" class="btn btn-link mt-3">¿Ya tienes cuenta? Iniciar sesión</a>
+</div>
+{% endblock %}
